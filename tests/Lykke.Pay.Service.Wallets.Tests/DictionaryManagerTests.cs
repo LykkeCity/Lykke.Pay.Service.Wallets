@@ -15,60 +15,32 @@ namespace Lykke.Pay.Service.Wallets.Tests
     public class DictionaryManagerTests
     {
         [UsedImplicitly]
-        public class TestItem : IDictionaryItem
+        public class TestItem : IWallet
         {
-            public string Id { get; set; }
+            public string WalletAddress { get; set; }
         }
 
         private readonly TimeSpan _cacheExpirationPeriod = TimeSpan.FromMinutes(1);
 
-        private IDictionaryManager<TestItem> _manager;
-        private Mock<IDictionaryRepository<TestItem>> _repositoryMock;
-        private Mock<IDictionaryCacheService<TestItem>> _cacheServiceMock;
+        private IWalletsManager<TestItem> _manager;
+        private Mock<IWalletsRepository<TestItem>> _repositoryMock;
+        private Mock<IWalletsCacheService<TestItem>> _cacheServiceMock;
         private Mock<IDateTimeProvider> _dateTimeProviderMock;
 
         [TestInitialize]
         public void InitializeTest()
         {
-            _repositoryMock = new Mock<IDictionaryRepository<TestItem>>();
-            _cacheServiceMock = new Mock<IDictionaryCacheService<TestItem>>();
+            _repositoryMock = new Mock<IWalletsRepository<TestItem>>();
+            _cacheServiceMock = new Mock<IWalletsCacheService<TestItem>>();
             _dateTimeProviderMock = new Mock<IDateTimeProvider>();
 
-            _manager = new DictionaryManager<TestItem>(_repositoryMock.Object, _cacheServiceMock.Object, _dateTimeProviderMock.Object, _cacheExpirationPeriod);
+            _manager = new WalletsManager<TestItem>(_repositoryMock.Object, _cacheServiceMock.Object, _dateTimeProviderMock.Object, _cacheExpirationPeriod);
         }
 
         #region Getting item
 
-        [TestMethod]
-        public async Task Getting_enabled_pair_returns_existing_item()
-        {
-            // Arrange
-            _cacheServiceMock
-                .Setup(s => s.TryGet(It.Is<string>(a => a == "EURUSD")))
-                .Returns((string a) => new TestItem{ Id = a });
-
-            // Act
-            var item = await _manager.TryGetAsync("EURUSD");
-
-            // Assert
-            Assert.IsNotNull(item);
-            Assert.AreEqual("EURUSD", item.Id);
-        }
-
-        [TestMethod]
-        public async Task Getting_enabled_pair_not_returns_missing_item()
-        {
-            // Arrange
-            _cacheServiceMock
-                .Setup(s => s.TryGet(It.Is<string>(a => a == "EURUSD")))
-                .Returns((string a) => null);
-
-            // Act
-            var item = await _manager.TryGetAsync("EURUSD");
-
-            // Assert
-            Assert.IsNull(item);
-        }
+      
+       
 
         #endregion
 
@@ -99,9 +71,9 @@ namespace Lykke.Pay.Service.Wallets.Tests
                 .Setup(s => s.GetAll())
                 .Returns(() => new[]
                 {
-                    new TestItem { Id = "EURUSD" },
-                    new TestItem { Id = "USDRUB" },
-                    new TestItem { Id = "USDCHF" }
+                    new TestItem { WalletAddress = "Test1" },
+                    new TestItem { WalletAddress = "Test2" },
+                    new TestItem { WalletAddress = "Test3" }
                 });
 
             // Act
@@ -109,9 +81,9 @@ namespace Lykke.Pay.Service.Wallets.Tests
 
             // Assert
             Assert.AreEqual(3, pairs.Length);
-            Assert.AreEqual("EURUSD", pairs[0].Id);
-            Assert.AreEqual("USDRUB", pairs[1].Id);
-            Assert.AreEqual("USDCHF", pairs[2].Id);
+            Assert.AreEqual("Test1", pairs[0].WalletAddress);
+            Assert.AreEqual("Test2", pairs[1].WalletAddress);
+            Assert.AreEqual("Test3", pairs[2].WalletAddress);
         }
 
         #endregion
@@ -128,16 +100,16 @@ namespace Lykke.Pay.Service.Wallets.Tests
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(() => new[]
                 {
-                    new TestItem {Id = "EURUSD"},
+                    new TestItem {WalletAddress = "Test1"},
                 });
 
             // Act
-            await _manager.TryGetAsync("EURUSD");
+            await _manager.GetLykkeWalletsAsync(new[] { "Test1" });
 
             // Asert
             _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
             // ReSharper disable once PossibleMultipleEnumeration
-            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.Id == "EURUSD") == 1)), Times.Once);
+            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.WalletAddress == "Test1") == 1)), Times.Once);
         }
 
         [TestMethod]
@@ -149,7 +121,7 @@ namespace Lykke.Pay.Service.Wallets.Tests
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(() => new[]
                 {
-                    new TestItem {Id = "EURUSD"},
+                    new TestItem {WalletAddress = "Test1"}
                 });
             _cacheServiceMock.Setup(s => s.GetAll()).Returns(() => new TestItem[0]);
 
@@ -159,7 +131,7 @@ namespace Lykke.Pay.Service.Wallets.Tests
             // Asert
             _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
             // ReSharper disable once PossibleMultipleEnumeration
-            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.Id == "EURUSD") == 1)), Times.Once);
+            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.WalletAddress == "Test1") == 1)), Times.Once);
         }
 
         [TestMethod]
@@ -173,10 +145,10 @@ namespace Lykke.Pay.Service.Wallets.Tests
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(() => new []
                 {
-                    new TestItem {Id = "EURUSD"},
+                    new TestItem {WalletAddress = "Test1"},
                 });
 
-            await _manager.TryGetAsync("EURUSD");
+            await _manager.GetLykkeWalletsAsync(new []{"Test1"});
 
             _dateTimeProviderMock.SetupGet(p => p.UtcNow).Returns(() => initialNow.Add(_cacheExpirationPeriod).AddTicks(1));
 
@@ -184,12 +156,12 @@ namespace Lykke.Pay.Service.Wallets.Tests
             _cacheServiceMock.ResetCalls();
 
             // Act
-            await _manager.TryGetAsync("EURUSD");
+            await _manager.GetLykkeWalletsAsync(new[] { "Test1" });
 
             // Asert
             _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
             // ReSharper disable once PossibleMultipleEnumeration
-            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.Id == "EURUSD") == 1)), Times.Once);
+            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.WalletAddress == "Test1") == 1)), Times.Once);
         }
 
         [TestMethod]
@@ -203,11 +175,11 @@ namespace Lykke.Pay.Service.Wallets.Tests
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(() => new []
                 {
-                    new TestItem {Id = "EURUSD"},
+                    new TestItem {WalletAddress = "Test1"},
                 });
             _cacheServiceMock.Setup(s => s.GetAll()).Returns(() => new TestItem[0]);
 
-            await _manager.TryGetAsync("EURUSD");
+            await _manager.GetLykkeWalletsAsync(new [] {"Test1"});
 
             _dateTimeProviderMock.SetupGet(p => p.UtcNow).Returns(() => initialNow.Add(_cacheExpirationPeriod).AddTicks(1));
 
@@ -220,7 +192,7 @@ namespace Lykke.Pay.Service.Wallets.Tests
             // Asert
             _repositoryMock.Verify(r => r.GetAllAsync(), Times.Once);
             // ReSharper disable once PossibleMultipleEnumeration
-            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.Id == "EURUSD") == 1)), Times.Once);
+            _cacheServiceMock.Verify(s => s.Update(It.Is<IEnumerable<TestItem>>(p => p.Count() == 1 && p.Count(a => a.WalletAddress == "Test1") == 1)), Times.Once);
         }
 
         #endregion

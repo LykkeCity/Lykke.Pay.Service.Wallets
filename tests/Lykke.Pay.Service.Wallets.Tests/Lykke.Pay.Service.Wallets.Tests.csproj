@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Lykke.Service.Assets.Core\Lykke.Service.Assets.Core.csproj" />
-    <ProjectReference Include="..\..\src\Lykke.Service.Assets.Services\Lykke.Service.Assets.Services.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Pay.Service.Wallets.Core\Lykke.Pay.Service.Wallets.Core.csproj" />
+    <ProjectReference Include="..\..\src\Lykke.Pay.Service.Wallets.Services\Lykke.Pay.Service.Wallets.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>

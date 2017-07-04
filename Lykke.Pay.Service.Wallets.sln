@@ -19,10 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Pay.Service.Wallets.C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{1F5202EC-8C70-44EF-9D83-DC19D1FB4F2F}"
 	ProjectSection(SolutionItems) = preProject
-		client\scripts\update.ps1 = client\scripts\update.ps1
+		client\scripts\Bitcoin.Api.Client.ps1 = client\scripts\Bitcoin.Api.Client.ps1
+		client\scripts\Lykke.Pay.Service.Wallets.Client.ps1 = client\scripts\Lykke.Pay.Service.Wallets.Client.ps1
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Pay.Service.Wallets", "src\Lykke.Pay.Service.Wallets\Lykke.Pay.Service.Wallets.csproj", "{FCCCBAD1-C7CF-48C0-B700-F63C62C87255}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitcoint.Api.Client", "client\Bitcoin.Api.Client\Bitcoint.Api.Client.csproj", "{7E870014-FE10-4A55-BD54-C6C3DBC886F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +53,10 @@ Global
 		{FCCCBAD1-C7CF-48C0-B700-F63C62C87255}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FCCCBAD1-C7CF-48C0-B700-F63C62C87255}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCCCBAD1-C7CF-48C0-B700-F63C62C87255}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +67,6 @@ Global
 		{20BDF5E2-CBB0-4A8F-B7A1-5F47B1418FD8} = {6F04271F-62A2-4C7F-82D9-EDBD1773C745}
 		{747B8280-19C3-44F9-8B27-BB24CD1420A1} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
 		{1F5202EC-8C70-44EF-9D83-DC19D1FB4F2F} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
+		{7E870014-FE10-4A55-BD54-C6C3DBC886F1} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
 	EndGlobalSection
 EndGlobal

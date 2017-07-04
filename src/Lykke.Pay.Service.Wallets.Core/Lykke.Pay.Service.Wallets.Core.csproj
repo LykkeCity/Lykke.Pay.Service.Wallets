@@ -8,4 +8,8 @@
     <PackageReference Include="JetBrains.Annotations" Version="10.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\client\Bitcoin.Api.Client\Bitcoint.Api.Client.csproj" />
+  </ItemGroup>
+
 </Project>
