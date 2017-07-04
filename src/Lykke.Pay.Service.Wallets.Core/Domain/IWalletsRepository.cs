@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Lykke.Pay.Service.Wallets.Core.Domain
 {
-    public interface IWalletsRepository<TWallet>
-        where TWallet : IWallet
+    public interface IWalletsRepository
+        
     {
-        Task<IEnumerable<TWallet>> GetAllAsync();
+        Task<IEnumerable<IWallet>> GetAllAsync();
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Autofac;
+using Bitcoint.Api.Client;
 using Common.Log;
 using Lykke.Pay.Service.Wallets.Core;
 using Lykke.Pay.Service.Wallets.Core.Domain;
@@ -35,8 +36,14 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
 
         private void RegisterWallet(ContainerBuilder builder)
         {
-            builder.RegisterType<WalletsRepository<IWallet>>()
-                .As<IWalletsRepository<IWallet>>()
+            
+            builder.RegisterType<BitcoinApi>()
+                .As<IBitcoinApi>()
+                .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.BitcoinApiUrl)))
+                .SingleInstance();
+
+            builder.RegisterType<WalletsRepository>()
+                .As<IWalletsRepository>()
                 .SingleInstance();
 
             builder.RegisterType<WalletsCacheService<IWallet>>()

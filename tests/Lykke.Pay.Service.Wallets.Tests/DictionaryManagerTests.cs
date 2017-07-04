@@ -23,14 +23,14 @@ namespace Lykke.Pay.Service.Wallets.Tests
         private readonly TimeSpan _cacheExpirationPeriod = TimeSpan.FromMinutes(1);
 
         private IWalletsManager<TestItem> _manager;
-        private Mock<IWalletsRepository<TestItem>> _repositoryMock;
+        private Mock<IWalletsRepository> _repositoryMock;
         private Mock<IWalletsCacheService<TestItem>> _cacheServiceMock;
         private Mock<IDateTimeProvider> _dateTimeProviderMock;
 
         [TestInitialize]
         public void InitializeTest()
         {
-            _repositoryMock = new Mock<IWalletsRepository<TestItem>>();
+            _repositoryMock = new Mock<IWalletsRepository>();
             _cacheServiceMock = new Mock<IWalletsCacheService<TestItem>>();
             _dateTimeProviderMock = new Mock<IDateTimeProvider>();
 

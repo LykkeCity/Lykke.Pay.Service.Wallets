@@ -13,14 +13,14 @@ namespace Lykke.Pay.Service.Wallets.Services
     public class WalletsManager<TWallet> : IWalletsManager<TWallet> 
         where TWallet : IWallet
     {
-        private readonly IWalletsRepository<TWallet> _repository;
+        private readonly IWalletsRepository _repository;
         private readonly IWalletsCacheService<TWallet> _cache;
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly TimeSpan _cacheExpirationPeriod;
         private DateTime _cacheExpirationMoment;
 
         public WalletsManager(
-            IWalletsRepository<TWallet> repository,
+            IWalletsRepository repository,
             IWalletsCacheService<TWallet> cache,
             IDateTimeProvider dateTimeProvider,
             TimeSpan cacheExpirationPeriod)
@@ -57,7 +57,7 @@ namespace Lykke.Pay.Service.Wallets.Services
         {
             var items = await _repository.GetAllAsync();
 
-            _cache.Update(items);
+            _cache.Update(items.Select(i=>(TWallet)i));
 
             _cacheExpirationMoment = _dateTimeProvider.UtcNow + _cacheExpirationPeriod;
         }
