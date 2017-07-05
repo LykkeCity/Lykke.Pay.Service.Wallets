@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Pay.Service.Wallets",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Bitcoint.Api.Client", "client\Bitcoin.Api.Client\Bitcoint.Api.Client.csproj", "{7E870014-FE10-4A55-BD54-C6C3DBC886F1}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Signing.Api", "client\Lykke.Signing.Api\Lykke.Signing.Api.csproj", "{4145F664-1E1A-4552-8D79-9F9AFC62977B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E870014-FE10-4A55-BD54-C6C3DBC886F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4145F664-1E1A-4552-8D79-9F9AFC62977B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4145F664-1E1A-4552-8D79-9F9AFC62977B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4145F664-1E1A-4552-8D79-9F9AFC62977B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4145F664-1E1A-4552-8D79-9F9AFC62977B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -68,5 +74,6 @@ Global
 		{747B8280-19C3-44F9-8B27-BB24CD1420A1} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
 		{1F5202EC-8C70-44EF-9D83-DC19D1FB4F2F} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
 		{7E870014-FE10-4A55-BD54-C6C3DBC886F1} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
+		{4145F664-1E1A-4552-8D79-9F9AFC62977B} = {3420C66E-488B-49E5-95D4-992D9E1F7540}
 	EndGlobalSection
 EndGlobal

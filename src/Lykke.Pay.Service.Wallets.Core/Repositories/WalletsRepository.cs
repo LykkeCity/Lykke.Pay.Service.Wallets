@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Bitcoint.Api.Client;
 using Bitcoint.Api.Client.Models;
 using Lykke.Pay.Service.Wallets.Core.Domain;
+using Lykke.Signing.Api;
+using Lykke.Signing.Api.Models;
 
 namespace Lykke.Pay.Service.Wallets.Core.Repositories
 {
@@ -11,20 +13,29 @@ namespace Lykke.Pay.Service.Wallets.Core.Repositories
 
     {
         private IBitcoinApi _bitcoinApi;
-        public WalletsRepository(IBitcoinApi bitcoinApi)
+        private ILykkeSigningAPI _signinApi;
+        public WalletsRepository(IBitcoinApi bitcoinApi, ILykkeSigningAPI signinApi)
         {
             _bitcoinApi = bitcoinApi;
+            _signinApi = signinApi;
         }
+
         public async Task<IEnumerable<IWallet>> GetAllAsync()
         {
-            var result = await _bitcoinApi.ApiWalletAllGetWithHttpMessagesAsync();
-            var wallets = result.Body as GetAllWalletsResult;
-            var ret = new List<IWallet>();
-            if (wallets != null)
+            var result = new List<string>();
+            var multiSign = (await _bitcoinApi.ApiWalletAllGetWithHttpMessagesAsync()).Body as GetAllWalletsResult;
+            var privWall = (await _signinApi.ApiBitcoinAddressesGetWithHttpMessagesAsync()).Body;
+            if (multiSign != null)
             {
-                ret.AddRange(wallets.Multisigs.Select(w=>new Wallet{WalletAddress = w} as IWallet));
+                result.AddRange(multiSign.Multisigs);
             }
-            return ret;
+
+            if (privWall != null)
+            {
+                result.AddRange(privWall.Addresses);
+            }
+
+            return (result.Distinct().Select(s => new Wallet {WalletAddress = s})).ToList();
         }
     }
 }

@@ -20,6 +20,8 @@ namespace Lykke.Pay.Service.Wallets.Core
         [UsedImplicitly]
         public class WalletListSettings
         {
+            public string LykkeSigningApiUrl { get; set; }
+
             public string BitcoinApiUrl { get; set; }
             public TimeSpan CacheExpirationPeriod { get; set; }
 

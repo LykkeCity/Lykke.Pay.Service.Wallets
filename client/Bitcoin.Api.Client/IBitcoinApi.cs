@@ -309,6 +309,16 @@ namespace Bitcoint.Api.Client
         /// </param>
         Task<HttpOperationResponse<object>> ApiOffchainAssetBalancesGetWithHttpMessagesAsync(string asset = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
+        /// <param name='limit'>
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<object>> ApiOffchainCommitmentBroadcastsGetWithHttpMessagesAsync(int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
         /// <summary>
         /// Creates cash out transaction without signs
         /// </summary>

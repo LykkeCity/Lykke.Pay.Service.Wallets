@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\client\Bitcoin.Api.Client\Bitcoint.Api.Client.csproj" />
+    <ProjectReference Include="..\..\client\Lykke.Signing.Api\Lykke.Signing.Api.csproj" />
   </ItemGroup>
 
 </Project>

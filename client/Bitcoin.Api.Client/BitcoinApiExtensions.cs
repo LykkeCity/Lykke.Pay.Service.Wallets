@@ -713,6 +713,32 @@ namespace Bitcoint.Api.Client
                 }
             }
 
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='limit'>
+            /// </param>
+            public static object ApiOffchainCommitmentBroadcastsGet(this IBitcoinApi operations, int? limit = default(int?))
+            {
+                return operations.ApiOffchainCommitmentBroadcastsGetAsync(limit).GetAwaiter().GetResult();
+            }
+
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='limit'>
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<object> ApiOffchainCommitmentBroadcastsGetAsync(this IBitcoinApi operations, int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ApiOffchainCommitmentBroadcastsGetWithHttpMessagesAsync(limit, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
             /// <summary>
             /// Creates cash out transaction without signs
             /// </summary>

@@ -7,6 +7,7 @@ using Lykke.Pay.Service.Wallets.Core.Domain;
 using Lykke.Pay.Service.Wallets.Core.Repositories;
 using Lykke.Pay.Service.Wallets.Core.Services;
 using Lykke.Pay.Service.Wallets.Services;
+using Lykke.Signing.Api;
 
 namespace Lykke.Pay.Service.Wallets.DependencyInjection
 {
@@ -44,6 +45,11 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
             builder.RegisterType<BitcoinApi>()
                 .As<IBitcoinApi>()
                 .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.BitcoinApiUrl)))
+                .SingleInstance();
+
+            builder.RegisterType<LykkeSigningAPI>()
+                .As<ILykkeSigningAPI>()
+                .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.LykkeSigningApiUrl)))
                 .SingleInstance();
 
             builder.RegisterType<WalletsRepository>()
