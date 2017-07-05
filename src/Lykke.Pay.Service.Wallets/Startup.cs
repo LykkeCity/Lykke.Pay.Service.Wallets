@@ -55,8 +55,12 @@ namespace Lykke.Pay.Service.Wallets
                 options.DefaultLykkeConfiguration("v1", "Pay Wallet service");
             });
 
-            //var settings =  HttpSettingsLoader.Load<ApplicationSettings>();
+#if DEBUG
             var settings = Configuration.Get<ApplicationSettings>();
+#else
+            var settings =  HttpSettingsLoader.Load<ApplicationSettings>();
+#endif
+
             var log = CreateLog(services, settings);
             var builder = new ContainerBuilder();
 
