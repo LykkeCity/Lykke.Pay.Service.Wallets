@@ -6,4 +6,4 @@ services:
     ports:
      - "80:4566"
     environment:
-     - ConnectionString=UseDevelopmentStorage=true
+     - SettingsUrl=https://settings-dev.lykkex.net/cdcsdfaregegffds_LykkePayServiceWallet
