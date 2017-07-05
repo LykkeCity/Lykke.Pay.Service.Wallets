@@ -36,7 +36,11 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
 
         private void RegisterWallet(ContainerBuilder builder)
         {
-            
+
+            builder.RegisterType <WalletsBroker>()
+                .As<IStartable>()
+                .SingleInstance();
+
             builder.RegisterType<BitcoinApi>()
                 .As<IBitcoinApi>()
                 .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.BitcoinApiUrl)))

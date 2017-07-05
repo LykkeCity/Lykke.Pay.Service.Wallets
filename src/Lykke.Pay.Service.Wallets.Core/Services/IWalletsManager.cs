@@ -4,7 +4,7 @@ using Lykke.Pay.Service.Wallets.Core.Domain;
 
 namespace Lykke.Pay.Service.Wallets.Core.Services
 {
-    public interface IWalletsManager<TWallet>
+    public interface IWalletsManager<TWallet> 
         where TWallet : IWallet
     {
         Task<IEnumerable<TWallet>> GetLykkeWalletsAsync(IEnumerable<string> walletAddresses);

@@ -22,6 +22,8 @@ namespace Lykke.Pay.Service.Wallets.Core
         {
             public string BitcoinApiUrl { get; set; }
             public TimeSpan CacheExpirationPeriod { get; set; }
+
+            public RabbitSettings WalletFeedRabbit { get; set; }
         }
 
         [UsedImplicitly]
@@ -44,6 +46,13 @@ namespace Lykke.Pay.Service.Wallets.Core
             public string ConnectionString { get; set; }
 
             public string QueueName { get; set; }
+        }
+
+        [UsedImplicitly]
+        public class RabbitSettings
+        {
+            public string ConnectionString { get; set; }
+            public string ExchangeName { get; set; }
         }
     }
 
