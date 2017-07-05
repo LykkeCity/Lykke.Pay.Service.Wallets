@@ -11,23 +11,22 @@ namespace Lykke.Pay.Service.Wallets.Client.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class IsAliveResponse
+    public partial class Wallet
     {
         /// <summary>
-        /// Initializes a new instance of the IsAliveResponse class.
+        /// Initializes a new instance of the Wallet class.
         /// </summary>
-        public IsAliveResponse()
+        public Wallet()
         {
           CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the IsAliveResponse class.
+        /// Initializes a new instance of the Wallet class.
         /// </summary>
-        public IsAliveResponse(string version = default(string), string env = default(string))
+        public Wallet(string walletAddress = default(string))
         {
-            Version = version;
-            Env = env;
+            WalletAddress = walletAddress;
             CustomInit();
         }
 
@@ -38,13 +37,8 @@ namespace Lykke.Pay.Service.Wallets.Client.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "Version")]
-        public string Version { get; set; }
-
-        /// <summary>
-        /// </summary>
-        [JsonProperty(PropertyName = "Env")]
-        public string Env { get; set; }
+        [JsonProperty(PropertyName = "WalletAddress")]
+        public string WalletAddress { get; set; }
 
     }
 }
