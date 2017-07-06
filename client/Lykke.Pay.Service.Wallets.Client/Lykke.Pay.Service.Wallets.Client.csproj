@@ -6,12 +6,12 @@
     <Authors>Lykke</Authors>
     <Company>Lykke</Company>
     <Product>Lykke.Service.Assets</Product>
-    <Description>Client for Lykke.Service.Assets API</Description>
+    <Description>Client for Lykke.Pay.Service.Wallets API</Description>
     <Copyright></Copyright>
-    <PackageLicenseUrl>https://github.com/LykkeCity/Lykke.Service.Assets/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://github.com/LykkeCity/Lykke.Service.Assets</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/LykkeCity/Lykke.Pay.Service.Wallets/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LykkeCity/Lykke.Pay.Service.Wallets</PackageProjectUrl>
     <PackageIconUrl>https://avatars3.githubusercontent.com/u/14153330?v=3&amp;s=200</PackageIconUrl>
-    <RepositoryUrl>https://github.com/LykkeCity/Lykke.Service.Assets.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/LykkeCity/Lykke.Pay.Service.Wallets.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Lykke</PackageTags>
   </PropertyGroup>
