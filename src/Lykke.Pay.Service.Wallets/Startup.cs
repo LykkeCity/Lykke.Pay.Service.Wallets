@@ -55,16 +55,12 @@ namespace Lykke.Pay.Service.Wallets
                 options.DefaultLykkeConfiguration("v1", "Pay Wallet service");
             });
 
-#if DEBUG
-            var settings = Configuration.Get<ApplicationSettings>();
-#else
-            var settings =  HttpSettingsLoader.Load<ApplicationSettings>();
-#endif
+            var appSettings = Configuration.LoadSettings<ApplicationSettings>();
 
-            var log = CreateLog(services, settings);
+            var log = CreateLogWithSlack(services, appSettings);
             var builder = new ContainerBuilder();
 
-            builder.RegisterModule(new ApiModule(settings, log));
+            builder.RegisterModule(new ApiModule(appSettings.CurrentValue, log));
             builder.Populate(services);
 
             ApplicationContainer = builder.Build();
@@ -72,36 +68,83 @@ namespace Lykke.Pay.Service.Wallets
             return new AutofacServiceProvider(ApplicationContainer);
         }
 
-        private static ILog CreateLog(IServiceCollection services, ApplicationSettings settings)
+        
+        private static ILog CreateLogWithSlack(IServiceCollection services, IReloadingManager<ApplicationSettings> appSettings)
+
         {
-            var appSettings = settings.WalletsService;
 
-            LykkeLogToAzureStorage logToAzureStorage = null;
-            var logToConsole = new LogToConsole();
-            var logAggregate = new LogAggregate();
+            var consoleLogger = new LogToConsole();
 
-            logAggregate.AddLogger(logToConsole);
+            var aggregateLogger = new AggregateLogger();
 
-            if (!string.IsNullOrEmpty(appSettings.Logs.DbConnectionString) &&
-                !(appSettings.Logs.DbConnectionString.StartsWith("${") && appSettings.Logs.DbConnectionString.EndsWith("}")))
+
+
+            aggregateLogger.AddLog(consoleLogger);
+
+
+
+            // Creating slack notification service, which logs own azure queue processing messages to aggregate log
+
+            var slackService = services.UseSlackNotificationsSenderViaAzureQueue(new AzureQueueIntegration.AzureQueueSettings
+
             {
-                logToAzureStorage = new LykkeLogToAzureStorage("Lykke.Pay.Service.Wallets", new AzureTableStorage<LogEntity>(
-                    appSettings.Logs.DbConnectionString, "PayWalletServiceLogs", logToConsole));
 
-                logAggregate.AddLogger(logToAzureStorage);
+                ConnectionString = appSettings.CurrentValue.WalletsService.Logs.DbConnectionString,
+
+                QueueName = appSettings.CurrentValue.SlackNotifications.AzureQueue.QueueName
+
+            }, aggregateLogger);
+
+
+
+            var dbLogConnectionStringManager = appSettings.Nested(x => x.WalletsService.Logs.DbConnectionString);
+
+            var dbLogConnectionString = dbLogConnectionStringManager.CurrentValue;
+
+
+
+            // Creating azure storage logger, which logs own messages to concole log
+
+            if (!string.IsNullOrEmpty(dbLogConnectionString) && !(dbLogConnectionString.StartsWith("${") && dbLogConnectionString.EndsWith("}")))
+
+            {
+
+                var persistenceManager = new LykkeLogToAzureStoragePersistenceManager(
+
+                    AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "BitcoinTransactionAggregatorLog", consoleLogger),
+
+                    consoleLogger);
+
+
+
+                var slackNotificationsManager = new LykkeLogToAzureSlackNotificationsManager(slackService, consoleLogger);
+
+
+
+                var azureStorageLogger = new LykkeLogToAzureStorage(
+
+                    persistenceManager,
+
+                    slackNotificationsManager,
+
+                    consoleLogger);
+
+
+
+                azureStorageLogger.Start();
+
+
+
+                aggregateLogger.AddLog(azureStorageLogger);
+
             }
 
-            var log = logAggregate.CreateLogger();
 
-            var slackService = services.UseSlackNotificationsSenderViaAzureQueue(new AzureQueueSettings
-            {
-                ConnectionString = settings.SlackNotifications.AzureQueue.ConnectionString,
-                QueueName = settings.SlackNotifications.AzureQueue.QueueName
-            }, log);
 
-            logToAzureStorage?.SetSlackNotification(slackService);
-            return log;
+            return aggregateLogger;
+
         }
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         [UsedImplicitly]

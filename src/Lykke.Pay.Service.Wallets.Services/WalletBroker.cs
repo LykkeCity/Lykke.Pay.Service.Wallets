@@ -6,6 +6,7 @@ using Lykke.Pay.Service.Wallets.Core;
 using Lykke.Pay.Service.Wallets.Core.Domain;
 using Lykke.Pay.Service.Wallets.Core.Services;
 using Lykke.Pay.Service.Wallets.Services.RabbitMq;
+using Lykke.RabbitMqBroker;
 using Lykke.RabbitMqBroker.Subscriber;
 
 namespace Lykke.Pay.Service.Wallets.Services
@@ -30,14 +31,16 @@ namespace Lykke.Pay.Service.Wallets.Services
         {
             try
             {
-                _subscriber = new RabbitMqSubscriber<WalletNotofication>(new RabbitMqSubscriberSettings
-                    {
-                        ConnectionString = _settings.WalletList.WalletFeedRabbit.ConnectionString,
-                        QueueName = $"{_settings.WalletList.WalletFeedRabbit.ExchangeName}.wallethash",
-                        ExchangeName = _settings.WalletList.WalletFeedRabbit.ExchangeName,
-                        IsDurable = true
-                    })
-                    .SetMessageDeserializer(new JsonMessageDeserializer<WalletNotofication>())
+
+                var settings = RabbitMqSubscriptionSettings
+                    .CreateForSubscriber(_settings.WalletList.WalletFeedRabbit.ConnectionString,
+                        _settings.WalletList.WalletFeedRabbit.ExchangeName, "wallethash");
+
+                _subscriber = new RabbitMqSubscriber<WalletNotofication>(settings,
+                        new ResilientErrorHandlingStrategy(_log, settings,
+                            retryTimeout: TimeSpan.FromSeconds(10),
+                            next: new DeadQueueErrorHandlingStrategy(_log, settings)))
+                    .SetMessageDeserializer(new RabbitMq.JsonMessageDeserializer<WalletNotofication>())
                     .SetMessageReadStrategy(new MessageReadWithTemporaryQueueStrategy())
                     .Subscribe(ProcessQuoteAsync)
                     .SetLogger(_log)

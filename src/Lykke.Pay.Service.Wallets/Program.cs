@@ -33,7 +33,7 @@ namespace Lykke.Pay.Service.Wallets
                 .UseApplicationInsights()
                 .Build();
             
-            host.Run(webHostCancellationTokenSource.Token);
+            host.Run();
 
             end.Set();
 
