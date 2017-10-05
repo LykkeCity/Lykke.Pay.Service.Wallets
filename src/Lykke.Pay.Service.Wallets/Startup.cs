@@ -153,11 +153,12 @@ namespace Lykke.Pay.Service.Wallets
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            app.UseLykkeMiddleware(Constants.ComponentName, ex => ErrorResponse.Create("Technical problem"));
+            app.UseLykkeMiddleware(Constants.ComponentName, ex => ErrorResponse.Create($"Technical problem: {ex}"));
 
             app.UseMvc();
             app.UseSwagger();
             app.UseSwaggerUi();
+            app.UseStaticFiles();
         }
     }
 }
