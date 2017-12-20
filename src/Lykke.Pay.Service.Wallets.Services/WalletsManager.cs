@@ -36,8 +36,8 @@ namespace Lykke.Pay.Service.Wallets.Services
 
         public async Task<IEnumerable<TWallet>> GetLykkeWalletsAsync(IEnumerable<string> walletAddresses)
         {
-            await EnsureCacheIsUpdatedAsync();
-
+            // await EnsureCacheIsUpdatedAsync();
+            await UpdateCacheAsync();
             return _cache.GetLykkeWallets(walletAddresses);
         }
 
