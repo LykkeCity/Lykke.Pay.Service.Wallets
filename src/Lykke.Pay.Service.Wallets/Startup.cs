@@ -111,7 +111,7 @@ namespace Lykke.Pay.Service.Wallets
 
                 var persistenceManager = new LykkeLogToAzureStoragePersistenceManager(
 
-                    AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "BitcoinTransactionAggregatorLog", consoleLogger),
+                    AzureTableStorage<LogEntity>.Create(dbLogConnectionStringManager, "LPSWallets", consoleLogger),
 
                     consoleLogger);
 
