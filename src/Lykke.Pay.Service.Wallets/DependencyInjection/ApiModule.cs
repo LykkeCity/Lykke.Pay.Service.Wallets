@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using Autofac;
 using Bitcoint.Api.Client;
 using Common.Log;
@@ -8,6 +9,8 @@ using Lykke.Pay.Service.Wallets.Core.Repositories;
 using Lykke.Pay.Service.Wallets.Core.Services;
 using Lykke.Pay.Service.Wallets.Services;
 using Lykke.Signing.Api;
+using NBitcoin;
+using NBitcoin.RPC;
 
 namespace Lykke.Pay.Service.Wallets.DependencyInjection
 {
@@ -63,6 +66,13 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
             builder.RegisterType<WalletsManager<IWallet>>()
                 .As<IWalletsManager<IWallet>>()
                 .WithParameter(new TypedParameter(typeof(TimeSpan), _settings.WalletsService.WalletList.CacheExpirationPeriod))
+                .SingleInstance();
+
+            var client = new RPCClient(
+                new NetworkCredential(_settings.WalletsService.Rpc.UserName,
+                    _settings.WalletsService.Rpc.Password),
+                new Uri(_settings.WalletsService.Rpc.Url), Network.GetNetwork(_settings.WalletsService.Rpc.Network));
+            builder.RegisterInstance(client)
                 .SingleInstance();
         }
 

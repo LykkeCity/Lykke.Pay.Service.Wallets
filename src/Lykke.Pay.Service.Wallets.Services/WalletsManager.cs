@@ -6,6 +6,8 @@ using JetBrains.Annotations;
 using Lykke.Pay.Service.Wallets.Core.Domain;
 using Lykke.Pay.Service.Wallets.Core.Repositories;
 using Lykke.Pay.Service.Wallets.Core.Services;
+using NBitcoin;
+using NBitcoin.RPC;
 
 namespace Lykke.Pay.Service.Wallets.Services
 {
@@ -18,18 +20,21 @@ namespace Lykke.Pay.Service.Wallets.Services
         private readonly IDateTimeProvider _dateTimeProvider;
         private readonly TimeSpan _cacheExpirationPeriod;
         private DateTime _cacheExpirationMoment;
+        private readonly RPCClient _rpcClient;
+
 
         public WalletsManager(
             IWalletsRepository repository,
             IWalletsCacheService<TWallet> cache,
             IDateTimeProvider dateTimeProvider,
+            RPCClient rpcClient,
             TimeSpan cacheExpirationPeriod)
         {
             _repository = repository;
             _cache = cache;
             _dateTimeProvider = dateTimeProvider;
             _cacheExpirationPeriod = cacheExpirationPeriod;
-
+            _rpcClient = rpcClient;
             _cacheExpirationMoment = DateTime.MinValue;
         }
 
@@ -68,6 +73,19 @@ namespace Lykke.Pay.Service.Wallets.Services
             {
                 await UpdateCacheAsync();
             }
+        }
+
+        public bool ValideteWallets(string walletAddress)
+        {
+            try
+            {
+                BitcoinAddress.Create(walletAddress, _rpcClient.Network);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

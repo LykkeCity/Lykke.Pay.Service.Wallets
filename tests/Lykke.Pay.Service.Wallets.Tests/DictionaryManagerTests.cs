@@ -8,6 +8,7 @@ using Lykke.Pay.Service.Wallets.Core.Services;
 using Lykke.Pay.Service.Wallets.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using NBitcoin.RPC;
 
 namespace Lykke.Pay.Service.Wallets.Tests
 {
@@ -26,6 +27,7 @@ namespace Lykke.Pay.Service.Wallets.Tests
         private Mock<IWalletsRepository> _repositoryMock;
         private Mock<IWalletsCacheService<TestItem>> _cacheServiceMock;
         private Mock<IDateTimeProvider> _dateTimeProviderMock;
+        private Mock<RPCClient> _rpcClientMock;
 
         [TestInitialize]
         public void InitializeTest()
@@ -33,8 +35,8 @@ namespace Lykke.Pay.Service.Wallets.Tests
             _repositoryMock = new Mock<IWalletsRepository>();
             _cacheServiceMock = new Mock<IWalletsCacheService<TestItem>>();
             _dateTimeProviderMock = new Mock<IDateTimeProvider>();
-
-            _manager = new WalletsManager<TestItem>(_repositoryMock.Object, _cacheServiceMock.Object, _dateTimeProviderMock.Object, _cacheExpirationPeriod);
+            _rpcClientMock = new Mock<RPCClient>();
+            _manager = new WalletsManager<TestItem>(_repositoryMock.Object, _cacheServiceMock.Object, _dateTimeProviderMock.Object, _rpcClientMock.Object, _cacheExpirationPeriod);
         }
 
         #region Getting item

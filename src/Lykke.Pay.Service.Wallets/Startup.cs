@@ -156,9 +156,30 @@ namespace Lykke.Pay.Service.Wallets
             app.UseLykkeMiddleware(Constants.ComponentName, ex => ErrorResponse.Create($"Technical problem: {ex}"));
 
             app.UseMvc();
-            app.UseSwagger();
-            app.UseSwaggerUi();
+
+            app.UseMvc();
+
+            app.UseSwagger(c =>
+
+            {
+
+                c.PreSerializeFilters.Add((swagger, httpReq) => swagger.Host = httpReq.Host.Value);
+
+            });
+
+            app.UseSwaggerUI(x =>
+
+            {
+
+                x.RoutePrefix = "swagger/ui";
+
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+
+            });
+
             app.UseStaticFiles();
+
+            
         }
     }
 }

@@ -15,6 +15,7 @@ namespace Lykke.Pay.Service.Wallets.Core
         {
             public WalletListSettings WalletList { get; set; }
             public LogsSettings Logs { get; set; }
+            public RpcSettings Rpc { get; set; }
         }
 
         [UsedImplicitly]
@@ -26,12 +27,23 @@ namespace Lykke.Pay.Service.Wallets.Core
             public TimeSpan CacheExpirationPeriod { get; set; }
 
             public RabbitSettings WalletFeedRabbit { get; set; }
+
+            
         }
 
         [UsedImplicitly]
         public class LogsSettings
         {
             public string DbConnectionString { get; set; }
+        }
+
+        [UsedImplicitly]
+        public class RpcSettings
+        {
+            public string UserName { get; set; }
+            public string Password { get; set; }
+            public string Url { get; set; }
+            public string Network { get; set; }
         }
 
         [UsedImplicitly]

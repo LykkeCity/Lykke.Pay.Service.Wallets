@@ -11,5 +11,6 @@ namespace Lykke.Pay.Service.Wallets.Core.Services
         Task<IEnumerable<TWallet>> GetAllAsync();
         void InsertNewAddress(TWallet wallet);
         Task UpdateCacheAsync();
+        bool ValideteWallets(string walletAddress);
     }
 }

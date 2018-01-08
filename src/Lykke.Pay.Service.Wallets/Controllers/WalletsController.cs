@@ -50,6 +50,20 @@ namespace Lykke.Pay.Service.Wallets.Controllers
             return Ok(WalletResponseModel.Create(lykkeWallets));
         }
 
-        
+
+        /// <summary>
+        /// Returns information about valid or not address of a wallet
+        /// </summary>
+        /// <param name="walletAddress"></param>
+        [HttpGet("{walletAddress}")]
+        [SwaggerOperation("ValideteWallets")]
+        [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        public bool ValideteWallets(string walletAddress)
+        {
+            return _manager.ValideteWallets(walletAddress);
+        }
+
+
     }
 }
