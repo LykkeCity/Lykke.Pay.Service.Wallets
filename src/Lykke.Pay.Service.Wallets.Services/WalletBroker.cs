@@ -33,8 +33,8 @@ namespace Lykke.Pay.Service.Wallets.Services
             {
 
                 var settings = RabbitMqSubscriptionSettings
-                    .CreateForSubscriber(_settings.WalletList.WalletFeedRabbit.ConnectionString,
-                        _settings.WalletList.WalletFeedRabbit.ExchangeName, "wallethash");
+                    .CreateForSubscriber(_settings.WalletFeedRabbit.ConnectionString,
+                        _settings.WalletFeedRabbit.ExchangeName, "wallethash");
                 settings.IsDurable = true;
                 _subscriber = new RabbitMqSubscriber<WalletNotofication>(settings,
                         new ResilientErrorHandlingStrategy(_log, settings,

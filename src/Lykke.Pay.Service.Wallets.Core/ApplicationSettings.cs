@@ -13,23 +13,19 @@ namespace Lykke.Pay.Service.Wallets.Core
         [UsedImplicitly]
         public class WalletsSettings
         {
-            public WalletListSettings WalletList { get; set; }
-            public LogsSettings Logs { get; set; }
+            public DbSettings Db { get; set; }
+            public TimeSpan CacheExpirationPeriod { get; set; }
+            public RabbitSettings WalletFeedRabbit { get; set; }
             public RpcSettings Rpc { get; set; }
         }
 
-        [UsedImplicitly]
-        public class WalletListSettings
-        {
-            public string DbConnectionString { get; set; }
-            public TimeSpan CacheExpirationPeriod { get; set; }
-            public RabbitSettings WalletFeedRabbit { get; set; }
-        }
+       
 
         [UsedImplicitly]
-        public class LogsSettings
+        public class DbSettings
         {
-            public string DbConnectionString { get; set; }
+            public string WalletConnectionString { get; set; }
+            public string LogsConnectionString { get; set; }
         }
 
         [UsedImplicitly]

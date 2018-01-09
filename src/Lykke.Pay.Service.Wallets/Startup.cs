@@ -89,7 +89,7 @@ namespace Lykke.Pay.Service.Wallets
 
             {
 
-                ConnectionString = appSettings.CurrentValue.WalletsService.Logs.DbConnectionString,
+                ConnectionString = appSettings.CurrentValue.WalletsService.Db.LogsConnectionString,
 
                 QueueName = appSettings.CurrentValue.SlackNotifications.AzureQueue.QueueName
 
@@ -97,7 +97,7 @@ namespace Lykke.Pay.Service.Wallets
 
 
 
-            var dbLogConnectionStringManager = appSettings.Nested(x => x.WalletsService.Logs.DbConnectionString);
+            var dbLogConnectionStringManager = appSettings.Nested(x => x.WalletsService.Db.LogsConnectionString);
 
             var dbLogConnectionString = dbLogConnectionStringManager.CurrentValue;
 

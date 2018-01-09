@@ -58,12 +58,12 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
 
             builder.RegisterType<WalletsManager<IWallet>>()
                 .As<IWalletsManager<IWallet>>()
-                .WithParameter(new TypedParameter(typeof(TimeSpan), _settings.WalletsService.WalletList.CacheExpirationPeriod))
+                .WithParameter(new TypedParameter(typeof(TimeSpan), _settings.WalletsService.CacheExpirationPeriod))
                 .SingleInstance();
 
             var repo = new MerchantWalletRepository(
                 new AzureRepositories.Azure.Tables.AzureTableStorage<MerchantWalletEntity>(
-                    _settings.WalletsService.WalletList.DbConnectionString,
+                    _settings.WalletsService.Db.WalletConnectionString,
                     "MerchantWallets", new CommonLogAdapter(_log)));
             builder.RegisterInstance(repo)
                 .As<IMerchantWalletRepository>()
