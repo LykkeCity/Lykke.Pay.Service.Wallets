@@ -20,6 +20,10 @@ namespace Lykke.Pay.Service.Wallets.Services
 
         public IEnumerable<TWallet> GetLykkeWallets(IEnumerable<string> walletAddresses)
         {
+            if (walletAddresses == null)
+            {
+                walletAddresses = new List<string>();
+            }
             return (from i in _items
                 join wa in walletAddresses on i.WalletAddress equals wa
                 select i).ToList();

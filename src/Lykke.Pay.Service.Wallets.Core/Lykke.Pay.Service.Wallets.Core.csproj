@@ -6,6 +6,8 @@
 
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="11.1.0" />
+    <PackageReference Include="Lykke.AzureRepositories" Version="1.0.103" />
+    <PackageReference Include="Lykke.Core" Version="1.0.103" />
   </ItemGroup>
 
   <ItemGroup>

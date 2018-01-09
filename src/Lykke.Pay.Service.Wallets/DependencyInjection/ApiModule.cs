@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Net;
 using Autofac;
-using Bitcoint.Api.Client;
+using AzureStorage.Tables;
 using Common.Log;
+using Lykke.AzureRepositories;
+using Lykke.AzureRepositories.Log;
+using Lykke.Core;
 using Lykke.Pay.Service.Wallets.Core;
 using Lykke.Pay.Service.Wallets.Core.Domain;
 using Lykke.Pay.Service.Wallets.Core.Repositories;
 using Lykke.Pay.Service.Wallets.Core.Services;
 using Lykke.Pay.Service.Wallets.Services;
-using Lykke.Signing.Api;
 using NBitcoin;
 using NBitcoin.RPC;
 
@@ -45,16 +47,7 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
                 .As<IStartable>()
                 .SingleInstance();
 
-            builder.RegisterType<BitcoinApi>()
-                .As<IBitcoinApi>()
-                .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.BitcoinApiUrl)))
-                .SingleInstance();
-
-            builder.RegisterType<LykkeSigningAPI>()
-                .As<ILykkeSigningAPI>()
-                .WithParameter(new TypedParameter(typeof(Uri), new Uri(_settings.WalletsService.WalletList.LykkeSigningApiUrl)))
-                .SingleInstance();
-
+          
             builder.RegisterType<WalletsRepository>()
                 .As<IWalletsRepository>()
                 .SingleInstance();
@@ -66,6 +59,14 @@ namespace Lykke.Pay.Service.Wallets.DependencyInjection
             builder.RegisterType<WalletsManager<IWallet>>()
                 .As<IWalletsManager<IWallet>>()
                 .WithParameter(new TypedParameter(typeof(TimeSpan), _settings.WalletsService.WalletList.CacheExpirationPeriod))
+                .SingleInstance();
+
+            var repo = new MerchantWalletRepository(
+                new AzureRepositories.Azure.Tables.AzureTableStorage<MerchantWalletEntity>(
+                    _settings.WalletsService.WalletList.DbConnectionString,
+                    "MerchantWallets", new CommonLogAdapter(_log)));
+            builder.RegisterInstance(repo)
+                .As<IMerchantWalletRepository>()
                 .SingleInstance();
 
             var client = new RPCClient(
